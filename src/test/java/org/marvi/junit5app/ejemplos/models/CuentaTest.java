@@ -2,8 +2,10 @@ package org.marvi.junit5app.ejemplos.models;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 import org.marvi.junit5app.ejemplos.exceptions.DinerosuficienteException;
 import java.math.BigDecimal;
+import java.util.Properties;
 
 
 class CuentaTest {
@@ -18,6 +20,16 @@ class CuentaTest {
     @AfterEach
     void tearDown() {
         System.out.println("finalizando el metodo de prueba");
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("Inicilizando el test");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        System.out.println("Finalizando el test");
     }
 
     @Test
@@ -102,11 +114,55 @@ class CuentaTest {
                 () -> assertTrue(banco.getCuentas().stream()
                             .anyMatch(cuenta -> cuenta.getPersona().equals("Natalia")))
         );}
-
     @Test
     @Disabled
     @DisplayName("Saltar test")
     void name() {
         fail();
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testSoloWindows() {
+    }
+
+    @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
+    void testSoloLinuxMac() {
+    }
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void testNoWindows() {
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    void soloJdk8(){
+    }
+
+    @Test
+    @DisabledOnJre(JRE.JAVA_8)
+    void soloNoJdk8(){
+    }
+
+    @Test
+    void imprimirSystemProperties() {
+        Properties properties = System.getProperties();
+        properties.forEach((k, v) -> System.out.println(k + " : " + v));
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "java.version", matches = "17.0.2")
+    void testJavaVersion(){}
+
+    @Test
+    @DisabledIfSystemProperty(named = "os.arch", matches = ".*32.*")
+    void testSolo64() {
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "os.arch", matches = ".*32.*")
+    void testNo64() {
     }
 }
