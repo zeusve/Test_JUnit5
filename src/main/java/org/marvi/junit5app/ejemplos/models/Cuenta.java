@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.marvi.junit5app.ejemplos.exceptions.DinerosuficienteException;
-
 import java.math.BigDecimal;
 
 @AllArgsConstructor
@@ -14,9 +13,15 @@ import java.math.BigDecimal;
 @Getter
 
 public class Cuenta {
+
+    private Banco banco;
     private String persona;
     private BigDecimal saldo;
 
+    public Cuenta (String persona, BigDecimal saldo){
+        this.persona = persona;
+        this.saldo = saldo;
+    }
     public void debito (BigDecimal saldo){
         BigDecimal nuevoSaldo = this.saldo.subtract(saldo);
         if (nuevoSaldo.compareTo(BigDecimal.ZERO) < 0){
@@ -34,9 +39,11 @@ public class Cuenta {
         if(!(obj instanceof Cuenta cuenta)){
             return false;
         }
-        if (this.persona == null || this.saldo == null){
+        if (this.persona == null || this.saldo == null || this.banco == null){
             return false;
         }
-        return this.persona.equals(cuenta.getPersona()) && this.saldo.equals(cuenta.getSaldo());
+        return this.persona.equals(cuenta.getPersona())
+                && this.saldo.equals(cuenta.getSaldo())
+                && this.banco.equals(cuenta.getBanco());
     }
 }
